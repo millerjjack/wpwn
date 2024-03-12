@@ -19,7 +19,7 @@ search_terms = ["robots",
                 "wp-cron",
                 "WordPress theme",
                 "directory has listing enabled",
-                "User",
+                "User(s)",
                 "plugins"]
 
 
@@ -30,7 +30,7 @@ def triggered():
 
 
 def scl(search_term, input_file, output_file):
-    if search_term == 'User':
+    if search_term == 'User(s)':
         with open(input_file, 'r') as f_input, open(output_file, 'w') as f_output:
             found = False
             for line in f_input:
@@ -70,13 +70,15 @@ def sort():  # if filenames in dir match keywords in each case, raise finding - 
         'XML-RPC': lambda: raisef(353, "via WPwn"),
         'wp-admin': lambda: raisef(355, "via WPwn"),
         'wp-Cron': lambda: raisef(349, "via WPwn"),
-        'User': lambda: raisef(352, "via WPwn")
+        'User(s)': lambda: raisef(352, "via WPwn")
     }
     for file_name in files:
         if file_name in switch:
             switch[file_name]()
-            print(file_name + " raised.")
-    print("\n" + "a good consultant will manually verify these results ;) ")
+            print(file_name + "\n" + "______________________________________________")
+            with open(file_name, 'r') as f1:
+                contents = f1.read()
+                print(contents)
 
 
 def raisef(id, note):
@@ -96,7 +98,7 @@ def generate():
 
 def annoying():
     try:
-        with open("common.txt", 'r') as common_terms, open("User", 'r') as usernames:
+        with open("common.txt", 'r') as common_terms, open("User(s)", 'r') as usernames:
             file1 = set(word.lower() for word in common_terms.read().split())
             file2 = set(word.lower() for word in usernames.read().split())
             common_words = file1.intersection(file2)
