@@ -103,7 +103,7 @@ def annoying():
             file2 = set(word.lower() for word in usernames.read().split())
             common_words = file1.intersection(file2)
             if common_words:
-                print("Potentially guessable usernames enumerated: " + str(common_words))
+                print("Easily guessable usernames enumerated: " + str(common_words))
                 raisef(342, "Via WPwn")
     except FileNotFoundError:
         print("Issue checking for predictable usernames")
