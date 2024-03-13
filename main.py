@@ -10,7 +10,7 @@ parser.add_argument("-f", "--file", required=True, help="copy your WPSCAN output
                                                         "it using -f {file}.txt")
 parser.add_argument("-u", "--url", required=True, help="add the target url. eg: -u cybercx.com.au")
 args = parser.parse_args()
-schema = {"toolname": "WPwn", "notes": "write that down", "scope": "Test", "issues": []}
+schema = {"toolname": "WPwn", "notes": "manually verify ALL findings", "scope": args.url, "issues": []}
 
 search_terms = ["robots",
                 "WordPress version",
@@ -65,11 +65,11 @@ def sort():  # if filenames in dir match keywords in each case, raise finding - 
     files = os.listdir('.')
     switch = {
         'robots': lambda: raisef(622, "via WPwn"),
-        'Wordpress version': lambda: raisef(348, "via WPwn"),
+        'WordPress version': lambda: raisef(348, "via WPwn"),
         'directory has listing enabled': lambda: raisef(592, "via WPwn"),
         'XML-RPC': lambda: raisef(353, "via WPwn"),
         'wp-admin': lambda: raisef(355, "via WPwn"),
-        'wp-Cron': lambda: raisef(349, "via WPwn"),
+        'wp-cron': lambda: raisef(349, "via WPwn"),
         'User(s)': lambda: raisef(352, "via WPwn")
     }
     for file_name in files:
