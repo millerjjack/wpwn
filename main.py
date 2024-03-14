@@ -3,6 +3,8 @@ import json
 import os
 from datetime import datetime
 
+#  import requests as r
+
 # need to import requests and use to check wp-config / default dir and files / plugins directory
 
 parser = argparse.ArgumentParser(description="WPwn - reviews wpscan output")
@@ -16,7 +18,7 @@ search_terms = ["robots",
                 "WordPress version",
                 "XML-RPC",
                 "wp-admin",
-                "wp-cron",
+                "WP-Cron",
                 "WordPress theme",
                 "directory has listing enabled",
                 "User(s)",
@@ -69,7 +71,7 @@ def sort():  # if filenames in dir match keywords in each case, raise finding - 
         'directory has listing enabled': lambda: raisef(592, "via WPwn"),
         'XML-RPC': lambda: raisef(353, "via WPwn"),
         'wp-admin': lambda: raisef(355, "via WPwn"),
-        'wp-cron': lambda: raisef(349, "via WPwn"),
+        'WP-Cron': lambda: raisef(349, "via WPwn"),
         'User(s)': lambda: raisef(352, "via WPwn")
     }
     for file_name in files:
@@ -106,14 +108,28 @@ def annoying():
                 print("Easily guessable usernames enumerated: " + str(common_words))
                 raisef(342, "Via WPwn")
     except FileNotFoundError:
-        print("Issue checking for predictable usernames")
+        print("Issue checking for predictable usernames or no user(s) enumerated")
+
+
+def version():
+    try:
+        with open("WordPress version", 'r') as versioning:
+            for line in versioning:
+                if "Insecure" in line:
+                    raisef(344, "Via WPwn")
+                    print("WordPress version outdated")
+                if "vulnerability identified" in line:
+                    print("WordPress vulnerability identified")
+    except FileNotFoundError:
+        print("Error checking WordPress version, or file does not exist.")
 
 
 def main():
     triggered()  # takes search_terms list and checks scan input
     delete()  # removes false positive files from current directory
-    sort()  # checks what files were generated and raises corresponding finding
+    sort()  # checks what files were generated and raises corresponding finding + displays results on screen
     annoying()  # extra function to review username file for guessable names
+    version()  # checks versioning and if outdated
     generate()  # generates .json import for reportx
 
 
